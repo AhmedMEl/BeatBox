@@ -19,7 +19,20 @@ class SoundViewModel(val beatBox:BeatBox) : BaseObservable() {
         get() = sound?.name
 
     fun onButtonClicked(){
-
+//       val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+//        lateinit var afChangeListener :AudioManager.OnAudioFocusChangeListener
+//
+//        val result: Int = audioManager.requestAudioFocus(
+//            afChangeListener,
+//            // Use the music stream.
+//            AudioManager.STREAM_MUSIC,
+//            // Request permanent focus.
+//            AudioManager.AUDIOFOCUS_GAIN
+//        )
+//
+//        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+//            beatBox.play(sound)
+//        }
         beatBox.play(sound)
     }
 }
