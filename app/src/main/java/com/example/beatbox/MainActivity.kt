@@ -1,21 +1,24 @@
 package com.example.beatbox
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
+import android.media.AudioManager
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.beatbox.databinding.ActivityMainBinding
 import com.example.beatbox.databinding.ListItemSoundBinding
 
+
 class MainActivity : AppCompatActivity() {
+    private var myAudioManager: AudioManager? = null
     private lateinit var beatBox: BeatBox
 
     private lateinit var speedControlBar: SeekBar
-    private var speed: Float = 1.0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,13 +29,15 @@ class MainActivity : AppCompatActivity() {
             layoutManager = GridLayoutManager(context, 3)
             adapter = SoundAdapter(beatBox.sounds)
         }
+        myAudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
         speedControlBar = findViewById(R.id.seekbar)
         speedControlBar.setProgress(50)
         speedControlBar.setOnSeekBarChangeListener(
             object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                    speed = (p1/50).toFloat()
+                override fun onProgressChanged(p0: SeekBar, p1: Int, p2: Boolean) {
+                    val speed = if (p1 < p0.max / 2) p1 * 0.01F + 0.5F else p1 * 0.02f
+                    beatBox.playbackSpeed = speed
                     Log.d("MAIN", speed.toString())
                 }
 
